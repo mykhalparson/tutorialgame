@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js">
+    </script>
+  </head>
+  <body>
+    <script type="text/javascript">
+var config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    }
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 300 },
+            debug: false
+        }
+    },
+
+  };
+
+  var game = new Phaser.Game(config);
+
+  function preload ()
+  {
+
+    this.load.image('world', 'assets/world.png');
+    this.load.image('player', 'assets/player.png');
+  }
+
+  function create ()
+  {
+    this.add.image(0, 0, 'world').setOrigin(0,0);
+    this.add.image(15, 475, 'player');
+
+  }
+
+  function update ()
+  {
+  }
+  //python -m SimpleHTTPServer 3000
+    </script>
+  </body>
+</html>

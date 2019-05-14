@@ -29,23 +29,34 @@
   var game = new Phaser.Game(config);
   var platforms
   var player
+  var stars
+  var score = 0;
+  var scoreText;
 
+  function collectStar (player, star)
+{
+    star.disableBody(true, true);
+    score += 10;
+    scoreText.setText('Score: ' + score);
+}
   function preload ()
   {
 
     this.load.image('world', 'assets/world.png');
     this.load.spritesheet('dude', 'assets/dude.png', {frameWidth: 32, frameHeight:48});
     this.load.image('platform', 'assets/platform2.png') ;
-
+    this.load.image('star', 'assets/star.png')
   }
 
   function create ()
   {
+
+
     this.add.image(0, 0, 'world').setOrigin(0,0);
     player = this.physics.add.sprite(100, 0, 'dude');
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
-    player.body.setGravityY(300)
+    player.body.setGravityY(100);
 
 
     this.anims.create({
@@ -69,12 +80,29 @@
     });
 
     platforms = this.physics.add.staticGroup();
-    platforms.create(200, 500, 'platform').setScale(.5);
+    platforms.create(0, 300, 'platform').setScale(.5);
     platforms.create(150, 400, 'platform').setScale(.52);
     platforms.create(750, 220, 'platform').setScale(.5);
-      this.physics.add.collider(player, platforms);
-//display videos, pics etc.
-  }
+    platforms.create(300, 599, 'platform').setScale(2.75)
+    this.physics.add.collider(player, platforms);
+
+
+    stars = this.physics.add.group({
+    key: 'star',
+    repeat: 11,
+    setXY: { x: 12, y: 0, stepX: 70 }
+});
+stars.children.iterate(function (child) {
+
+  child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+
+});
+this.physics.add.collider(stars, platforms);
+this.physics.add.overlap(player, stars, collectStar, null, this);
+  scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#FF6347' });
+}
+
+
 
   function update ()
   {
